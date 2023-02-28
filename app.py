@@ -17,14 +17,17 @@ def drug_not_found(error):
 
 @app.errorhandler(TimeoutException)
 def timeout(error):
+    print(error)
     return {"message":'Search process timed out', "status":500}
 
 @app.errorhandler(TimeoutError)
 def timeout(error):
+    print(error)
     return {"message":'Search process timed out (30s)', "status":500}
 
 @app.errorhandler(FlaskError)
 def handle_error(error):
+    print(error)
     return {"message": error.message, "status": error.status_code}
 
 @app.route("/drugs/names/<search_term>")
