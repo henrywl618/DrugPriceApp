@@ -8,13 +8,18 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import ElementNotInteractableException, TimeoutException
 from error import FlaskError
 import re
+import os
+
+CHROMEBIN = os.getenv('GOOGLE_CHROME_BIN') or "/usr/bin/google-chrome"
+CHROMEDRIVER_PATH = os.getenv('CHROMEDRIVER_PATH') or "/usr/lib/chromium-browser/chromedriver"
 
 class DDNSearch:
 
     def __init__(self):
         self.base_url = "https://www.discountdrugnetwork.com"
-        self.service = Service(executable_path="/usr/lib/chromium-browser/chromedriver")
+        self.service = Service(executable_path=CHROMEDRIVER_PATH)
         self.options = webdriver.ChromeOptions()
+        self.options.binary_location = CHROMEBIN
         self.options.add_argument('--ignore-certificate-errors')
         self.options.add_argument('--incognito')
         self.options.add_argument('--headless')
