@@ -13,6 +13,7 @@ import os
 CHROMEBIN = os.getenv('GOOGLE_CHROME_BIN') or "/usr/bin/google-chrome"
 CHROMEDRIVER_PATH = os.getenv('CHROMEDRIVER_PATH') or "/usr/lib/chromium-browser/chromedriver"
 
+print(CHROMEBIN, CHROMEDRIVER_PATH)
 class DDNSearch:
 
     def __init__(self):
@@ -23,6 +24,8 @@ class DDNSearch:
         self.options.add_argument('--ignore-certificate-errors')
         self.options.add_argument('--incognito')
         self.options.add_argument('--headless')
+        self.options.add_argument("--disable-dev-shm-usage")
+        self.options.add_argument("--no-sandbox")
         self.driver = webdriver.Chrome(service=self.service, options=self.options)
         self.driver.set_window_position(0, 0)
         self.driver.set_window_size(1024, 768)
