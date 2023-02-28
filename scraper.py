@@ -124,11 +124,14 @@ class WellRxSearch:
 
     def __init__(self):
         self.base_url = "https://www.wellrx.com/prescriptions"
-        self.service = Service(executable_path="/usr/lib/chromium-browser/chromedriver")
+        self.service = Service(executable_path=CHROMEDRIVER_PATH)
         self.options = webdriver.ChromeOptions()
         self.options.add_argument('--ignore-certificate-errors')
         self.options.add_argument('--incognito')
         self.options.add_argument('--headless')
+        self.options.add_argument("--disable-dev-shm-usage")
+        self.options.add_argument("--no-sandbox")
+        self.options.binary_location = CHROMEBIN
         self.driver = webdriver.Chrome(service=self.service, options=self.options)
         self.driver.set_window_position(0, 0)
         self.driver.set_window_size(1024, 768)
