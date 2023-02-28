@@ -18,7 +18,7 @@ def drug_not_found(error):
 @app.errorhandler(TimeoutException)
 def timeout(error):
     print(error)
-    return {"message":'Search process timed out', "status":500, "error":error.message}
+    return {"message":'Search process timed out', "status":500}
 
 @app.errorhandler(TimeoutError)
 def timeout(error):

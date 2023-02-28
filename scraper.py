@@ -84,15 +84,15 @@ class DDNSearch:
         print(updated_url)
         self.driver.get(updated_url)
         #Wait for the page to load
-        page = WebDriverWait(self.driver, timeout=10).until(EC.presence_of_element_located((By.CLASS_NAME,'c-results__item')))
+        page = WebDriverWait(self.driver, timeout=20).until(EC.presence_of_element_located((By.CLASS_NAME,'c-results__item')))
         #Find the drug FORM selector and click
         filters = self.driver.find_elements(By.CLASS_NAME, 'ant-select-selection-item')
         filters[0].click()
         #Select the drug form from the dropdown list and wait for it to load
-        WebDriverWait(self.driver, timeout=10).until(EC.element_to_be_clickable((By.XPATH , f'//div[@class="ant-select-item-option-content" and text()="{form}"]')))
+        WebDriverWait(self.driver, timeout=20).until(EC.element_to_be_clickable((By.XPATH , f'//div[@class="ant-select-item-option-content" and text()="{form}"]')))
         form_selection = self.driver.find_element(By.XPATH , f'//div[@class="ant-select-item-option-content" and text()="{form}"]')
         form_selection.click()
-        page = WebDriverWait(self.driver, timeout=10).until(EC.presence_of_element_located((By.CLASS_NAME,'c-results__item')))
+        page = WebDriverWait(self.driver, timeout=20).until(EC.presence_of_element_located((By.CLASS_NAME,'c-results__item')))
         #Click on each dropdown menu to update the dropdown list
         for menu in filters:
             menu.click()
@@ -101,17 +101,17 @@ class DDNSearch:
         #Click on the drug dose selector and select the provided dose
         filters[1].click()
         dose_selection = lists[1].find_element(By.XPATH , f'.//div[@class="ant-select-item-option-content" and text()="{dose}"]')
-        WebDriverWait(self.driver, timeout=10).until(EC.visibility_of(dose_selection))
+        WebDriverWait(self.driver, timeout=20).until(EC.visibility_of(dose_selection))
         dose_selection.click()
-        WebDriverWait(self.driver, timeout=10).until(EC.presence_of_element_located((By.CLASS_NAME,'c-results__item')))
+        WebDriverWait(self.driver, timeout=20).until(EC.presence_of_element_located((By.CLASS_NAME,'c-results__item')))
         #Click on the qty select and select the provided qty
         filters[2].click()
         qty_selection = lists[2].find_element(By.XPATH , f'.//div[@class="ant-select-item-option-content" and text()="{qty}"]')
-        WebDriverWait(self.driver, timeout=10).until(EC.visibility_of(qty_selection))
+        WebDriverWait(self.driver, timeout=20).until(EC.visibility_of(qty_selection))
         self.driver.save_screenshot("ddnpage.png")
         qty_selection.click()       
         #Find the drug price results once they are loaded
-        results = WebDriverWait(self.driver, timeout=10).until(lambda d: d.find_elements(by=By.CSS_SELECTOR, value='.c-results__item'))
+        results = WebDriverWait(self.driver, timeout=20).until(lambda d: d.find_elements(by=By.CSS_SELECTOR, value='.c-results__item'))
         output = []
         for result in results:
             pharmacy_name_el = result.find_element(By.XPATH, './/div[@class="c-results__pharmacyname"]')
@@ -190,23 +190,23 @@ class WellRxSearch:
         updated_url = f'{self.base_url}/prescriptions/{drugname}/{zip}/?freshSearch=true'
         print(updated_url)
         self.driver.get(updated_url)
-        page = WebDriverWait(self.driver, timeout=10).until(EC.presence_of_element_located((By.CLASS_NAME,'filter-group-menu')))
+        page = WebDriverWait(self.driver, timeout=20).until(EC.presence_of_element_located((By.CLASS_NAME,'filter-group-menu')))
         #Skip if there is only one form
         form_list = self.driver.find_elements(By.XPATH, f'//ul[@id="form"]/li')
         if len(form_list) > 1:
             #Find the drug form selection filter and click on it and select the form provided in the argument
             forms_selection = self.driver.find_element(By.XPATH, '//button[@for="form"]')
             #This webpage scrolls down and hides the filter options under the navbar after the page loads. We need to scroll to the top of the page so we can click the drug form filter, and then click on the desired drug form. Using send keys(Ctrl+Home) or other scrolling methods were too slow and forms_selection.click() was trying to click before filter was visible
-            WebDriverWait(self.driver, timeout=10).until(EC.visibility_of(forms_selection))
+            WebDriverWait(self.driver, timeout=20).until(EC.visibility_of(forms_selection))
             drug_image = self.driver.find_element(By.CLASS_NAME, "drug-image")
             self.driver.execute_script("arguments[0].scrollIntoView();", drug_image)
             forms_selection.click()
             form_selection = self.driver.find_element(By.XPATH , f'//ul[@id="form"]/li[text()="{form}"]')
-            WebDriverWait(self.driver, timeout=10).until(EC.element_to_be_clickable(form_selection))
+            WebDriverWait(self.driver, timeout=20).until(EC.element_to_be_clickable(form_selection))
             form_selection.click()
             #Wait for the page to load the new doses and qty of the drug form we clicked on. Tracked by waiting until a previous element goes stale, and waiting until we find the newly loaded element
-            WebDriverWait(self.driver, timeout=10).until(EC.staleness_of(form_selection))
-            WebDriverWait(self.driver, timeout=10).until(EC.presence_of_element_located((By.XPATH, '//button[@for="dosages"]')))
+            WebDriverWait(self.driver, timeout=20).until(EC.staleness_of(form_selection))
+            WebDriverWait(self.driver, timeout=20).until(EC.presence_of_element_located((By.XPATH, '//button[@for="dosages"]')))
         #Select the dose
         dosage_filter = self.driver.find_element(By.XPATH, '//button[@for="dosages"]')
         drug_image = self.driver.find_element(By.CLASS_NAME, "drug-image")
@@ -221,8 +221,8 @@ class WellRxSearch:
         try:
             dosage_selection.click()
             # Wait for new page reload
-            WebDriverWait(self.driver, timeout=10).until(EC.staleness_of(dosage_filter))
-            WebDriverWait(self.driver, timeout=10).until(EC.presence_of_element_located((By.XPATH, '//button[@for="dosages"]')))
+            WebDriverWait(self.driver, timeout=20).until(EC.staleness_of(dosage_filter))
+            WebDriverWait(self.driver, timeout=20).until(EC.presence_of_element_located((By.XPATH, '//button[@for="dosages"]')))
         except ElementNotInteractableException:
             pass
 
@@ -236,8 +236,8 @@ class WellRxSearch:
         qty_selection = self.driver.find_element(By.XPATH , f'.//ul[@id="quantity"]/li[contains(text(),"{qty} ")]')
         qty_selection.click()
         # Wait for new page reload
-        WebDriverWait(self.driver, timeout=10).until(EC.staleness_of(qty_filter))
-        WebDriverWait(self.driver, timeout=10).until(EC.presence_of_element_located((By.XPATH, '//button[@for="dosages"]')))
+        WebDriverWait(self.driver, timeout=20).until(EC.staleness_of(qty_filter))
+        WebDriverWait(self.driver, timeout=20).until(EC.presence_of_element_located((By.XPATH, '//button[@for="dosages"]')))
         
         #Scrape and return pharmacy/price data
         pharmacy_elements = self.driver.find_elements(By.CLASS_NAME, "pharmCard")
