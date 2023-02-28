@@ -197,7 +197,7 @@ class WellRxSearch:
             #Find the drug form selection filter and click on it and select the form provided in the argument
             forms_selection = self.driver.find_element(By.XPATH, '//button[@for="form"]')
             #This webpage scrolls down and hides the filter options under the navbar after the page loads. We need to scroll to the top of the page so we can click the drug form filter, and then click on the desired drug form. Using send keys(Ctrl+Home) or other scrolling methods were too slow and forms_selection.click() was trying to click before filter was visible
-            WebDriverWait(self.driver, timeout=20).until(EC.visibility_of(forms_selection))
+            WebDriverWait(self.driver, timeout=20).until(EC.presence_of_element_located((By.XPATH, '//button[@for="form"]')))
             drug_image = self.driver.find_element(By.CLASS_NAME, "drug-image")
             self.driver.execute_script("arguments[0].scrollIntoView();", drug_image)
             forms_selection.click()
